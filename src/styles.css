@@ -58,16 +58,15 @@ img {
 }
 
 .gallery li {
-  height: 450px;
+  /* height: 450px; */
   overflow: hidden;
-  margin: 0 20px;
+  margin: 0 15px;
 }
 
 .gallery img {
   display: block;
   width: 100%;
-  height: 200px;
-  object-fit: cover;
+  /* object-fit: cover; */
 }
 
 .gallery a {

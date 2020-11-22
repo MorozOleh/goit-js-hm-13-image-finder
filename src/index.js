@@ -1,12 +1,12 @@
 import './styles.css';
-import './styles.scss';
 import '../node_modules/basiclightbox/dist/basicLightbox.min.css';
+import '../node_modules/material-design-icons/iconfont/material-icons.css';
 import "@pnotify/core/dist/PNotify.css";
 import "@pnotify/core/dist/BrightTheme.css";
 import pic from './templates/pictures.hbs'
 import * as basicLightbox from 'basiclightbox'
 import PixabayApi from './js/pixabayApi'
-import { alert, defaultModules } from '../node_modules/@pnotify/core/dist/PNotify.js';
+import { error } from '../node_modules/@pnotify/core/dist/PNotify.js';
 import './js/render.js'
 
 
@@ -20,10 +20,10 @@ refs.searchForm.addEventListener('submit', onSearch);
 
 function onSearch(e) {
   e.preventDefault();
-  pixabayApi.searchQuery = e.currentTarget.elements.query.value;
-  if (pixabayApi.searchQuery === '') {
+  pixabayApi.query = e.currentTarget.elements.query.value;
+  if (pixabayApi.query === '') {
 
-    return alert({
+    return error({
     text: 'try something other!'
   });}
 
@@ -32,11 +32,18 @@ function onSearch(e) {
   fetchPictures();
 }
 
-function fetchPictures() {
-  pixabayApi.fetchPictures().then(picture => {
-    appendPicturesMark(picture);
+// refactoring;
+async function fetchPictures() {
+  const response = await pixabayApi.fetchPictures();
+  const result = await response;
+    if (result.hits.length === 0) {
+      return error({
+    text: 'try something other!'
+      })
+  };
+    appendPicturesMark(result);
     document.querySelector('.gallery').addEventListener('click', onClick);
-  })
+
 }
 
 function appendPicturesMark(pictures) {
@@ -67,14 +74,14 @@ instance.show()
 
 const onEntries = entries => {
   entries.forEach(entry => {
-    if (entry.isIntersecting && pixabayApi.searchQuery !== '') {
+    if (entry.isIntersecting && pixabayApi.query !== '') {
   fetchPictures();
 }})
 };
 
 
 const options = {
-  rootMargin: '250px',
+  rootMargin: '350px',
 };
 const observer = new IntersectionObserver(onEntries, options);
 
