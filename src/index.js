@@ -62,11 +62,9 @@ function onClick(e) {
 }
 const valueData = e.target.dataset.source;
 const instance = basicLightbox.create(`
-    <img class='basicLightbox__image' src="" >
+    <img class='basicLightbox__image' src="${valueData}" >
 `)
 instance.show()
-  const image = document.querySelector('.basicLightbox__image');
-  image.src = valueData;
 }
 
 
